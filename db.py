@@ -15,6 +15,7 @@ def db_connect():
     cursor.execute("CREATE TABLE IF NOT EXISTS population (city_id INT, population INT)")
     cursor.execute("CREATE TABLE IF NOT EXISTS visitors (city_id INT, museum_name VARCHAR(100), visitors INT)")
     cursor.execute("CREATE TABLE IF NOT EXISTS avg_visitors (city_id INT, avg_visitors INT)")
+    cursor.execute("CREATE TABLE IF NOT EXISTS city_aliases (id INT, alias VARCHAR(100))")
 
     return cursor
 
