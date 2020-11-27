@@ -52,7 +52,8 @@ def get_visitor_df():
     vis_data = fetch_visitor_data()
     vis_cols = ["Museum Name", "Country", "City", "Visitors per year"]
     vis_df = pd.DataFrame(vis_data, columns=vis_cols)
-    vis_df["City"] = vis_df["City"].str.replace("'", "\\'") # Escape backslash for SQL
+    vis_df["City"] = vis_df["City"].str.replace("'", "\\'") # Escape backslashes
+    vis_df["Museum Name"] = vis_df["Museum Name"].str.replace("'", "\\'") # Escape backslashes
     vis_df["City"] = vis_df["City"].apply(unidecode) # Remove accents (Ex: Oswiecim)
     return vis_df 
 
