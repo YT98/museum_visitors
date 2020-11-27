@@ -17,7 +17,6 @@ class Db:
         cursor.execute("CREATE TABLE IF NOT EXISTS population (city_id INT, population INT)")
         cursor.execute("CREATE TABLE IF NOT EXISTS visitors (city_id INT, museum_name VARCHAR(100), visitors INT)")
         cursor.execute("CREATE TABLE IF NOT EXISTS avg_visitors (city_id INT, avg_visitors INT)")
-        cursor.execute("CREATE TABLE IF NOT EXISTS aliases (name VARCHAR(100), alias VARCHAR(100))")
         cursor.close()
 
     def commit(self):
@@ -27,10 +26,43 @@ class Db:
         cursor = self.conn.cursor()
         cursor.execute("INSERT INTO cities VALUES (%s, '%s', '%s')" % (id, name, country))
         cursor.close()
-
-    def insert_alias(self, key, alias):
+    
+    def get_cities(self):
         cursor = self.conn.cursor()
-        cursor.execute("INSERT INTO aliases VALUES ('%s', '%s')" % (key, alias))
+        cursor.execute("SELECT * FROM cities")
+        cities = cursor.fetchall()
+        cursor.close()
+        return cities
+
+    def get_city_id(self, name):
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT id FROM cities WHERE name = '%s'" % (name))
+        id = cursor.fetchone()[0]
+        cursor.close()
+        return id
+
+    def insert_population(self, city_id, population):
+        cursor = self.conn.cursor()
+        cursor.execute("INSERT INTO population VALUES ('%s', '%s')" % (city_id, population))
+        cursor.close()
+
+    def insert_visitors(self, city_id, museum_name, visitors):
+        cursor = self.conn.cursor()
+        cursor.execute("INSERT INTO visitors VALUES (%s, '%s', %s)" % (city_id, museum_name, visitors))
+        cursor.close()
+
+    def get_city_visitors(self, city_id):
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT visitors FROM visitors WHERE city_id = %s" % (city_id))
+        vis_ls = []
+        for (vis,) in cursor:
+            vis_ls.append(vis)
+        cursor.close()
+        return vis_ls
+
+    def insert_avg_visitors(self, city_id, avg_visitors):
+        cursor = self.conn.cursor()
+        cursor.execute("INSERT INTO avg_visitors VALUES (%s, %s)" % (city_id, avg_visitors))
         cursor.close()
 
     def truncate_tables(self):
