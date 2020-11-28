@@ -8,7 +8,7 @@ import pandas as pd
 import numpy as np
 from unidecode import unidecode
 
-LONDON_DS_PATH = os.path.join(os.path.dirname(__file__), "datasets/global-city-population-estimates.xls")
+LONDON_DS_PATH = "/tmp/global-city-population-estimates.xls"
 
 # Fetches and parses data from wikipedia api
 def fetch_visitor_data():
@@ -68,7 +68,7 @@ def get_population_df():
         download_london_dataset()
 
     pop_df = pd.read_excel(
-        "datasets/global-city-population-estimates.xls", 
+        LONDON_DS_PATH, 
         "CITIES-OVER-300K",
         dtype={"2020": np.int64}
         )
