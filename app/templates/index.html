@@ -1,5 +1,5 @@
 {% macro table(col_names, rows) %}
-  <table class="table table-sm">
+  <table class="table table-sm table-hover">
     <thead>
       <tr>
         {% for col_name in col_names %}
@@ -11,7 +11,7 @@
       {% for row in rows %}
         <tr>
           {% for el in row %}
-            <th> {{ el }} </th>
+            <td> {{ el }} </td>
           {% endfor %}
         </tr>
       {% endfor %}
@@ -33,32 +33,36 @@
   </head>
   <body>
 
-    <h1>Museum Visitors</h1>
-    <button type="button" class="btn btn-primary" id="populate">Populate Database</button>
+    <div class="container">
+      <h1 class="mt-4 mb-4">Museum Visitors</h1>
 
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-      <li class="nav-item" role="presentation">
-        <a class="nav-link active" id="population-tab" data-toggle="tab" href="#population" role="tab" aria-controls="population" aria-selected="true">Population</a>
-      </li>
-      <li class="nav-item" role="presentation">
-        <a class="nav-link" id="visitors-tab" data-toggle="tab" href="#visitors" role="tab" aria-controls="visitors" aria-selected="false">Museums and Visitors</a>
-      </li>
-      <li class="nav-item" role="presentation">
-        <a class="nav-link" id="avg-visitors-tab" data-toggle="tab" href="#avg-visitors" role="tab" aria-controls="avg-visitors" aria-selected="false">Average Visitors</a>
-      </li>
-    </ul>
-    <div class="tab-content" id="myTabContent">
-      <div class="tab-pane fade show active" id="population" role="tabpanel" aria-labelledby="population-tab">
-        <!-- {{ table(pop) }} -->
-        {{ table(pop_cols, pop) }}
-      </div>
-      <div class="tab-pane fade" id="visitors" role="tabpanel" aria-labelledby="visitors-tab">
-        {{ table(vis_cols, vis) }}
-      </div>
-      <div class="tab-pane fade" id="avg-visitors" role="tabpanel" aria-labelledby="avg-visitors-tab">
-        {{ table(avg_vis_cols, avg_vis) }}
+      <button type="button" class="btn btn-primary mb-4 p-2" id="populate">Populate Database</button>
+
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <a class="nav-link active" id="population-tab" data-toggle="tab" href="#population" role="tab" aria-controls="population" aria-selected="true">Population</a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link" id="visitors-tab" data-toggle="tab" href="#visitors" role="tab" aria-controls="visitors" aria-selected="false">Museums and Visitors</a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link" id="avg-visitors-tab" data-toggle="tab" href="#avg-visitors" role="tab" aria-controls="avg-visitors" aria-selected="false">Average Visitors</a>
+        </li>
+      </ul>
+      <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="population" role="tabpanel" aria-labelledby="population-tab">
+          <!-- {{ table(pop) }} -->
+          {{ table(pop_cols, pop) }}
+        </div>
+        <div class="tab-pane fade" id="visitors" role="tabpanel" aria-labelledby="visitors-tab">
+          {{ table(vis_cols, vis) }}
+        </div>
+        <div class="tab-pane fade" id="avg-visitors" role="tabpanel" aria-labelledby="avg-visitors-tab">
+          {{ table(avg_vis_cols, avg_vis) }}
+        </div>
       </div>
     </div>
+    
 
     <!-- jQuery and Bootstrap Bundle (includes Popper) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
