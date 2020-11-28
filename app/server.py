@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, redirect
 from flask import render_template
 
 from .Db import Db
@@ -11,9 +11,13 @@ db = Db()
 
 @app.route("/")
 def home():
+    return redirect("/data")
+
+@app.route("/data")
+def data():
     pop_cols, vis_cols, avg_vis_cols = db.get_home_page_data()[0]
     pop, vis, avg_vis = db.get_home_page_data()[1]
-    return render_template('index.html', pop_cols=pop_cols, pop=pop, vis_cols=vis_cols, vis=vis, avg_vis_cols=avg_vis_cols, avg_vis=avg_vis)
+    return render_template('data.html', pop_cols=pop_cols, pop=pop, vis_cols=vis_cols, vis=vis, avg_vis_cols=avg_vis_cols, avg_vis=avg_vis)
 
 @app.route("/populate")
 def populate():
