@@ -1,7 +1,9 @@
 import pandas as pd
 import numpy as np
-from Db import Db
-import fetch_data as fetch_data
+
+from .Db import Db
+from .fetch_data import get_visitor_df
+from .fetch_data import get_population_df
 
 
 def populate_db(db):
@@ -9,8 +11,8 @@ def populate_db(db):
     db.truncate_tables()
 
     ### Load dataframes and create alias dict
-    vis_df = fetch_data.get_visitor_df()
-    london_df = fetch_data.get_population_df()
+    vis_df = get_visitor_df()
+    london_df = get_population_df()
     aliases = {
         "New York City": "New York",
         "South Korea": "Republic of Korea",
