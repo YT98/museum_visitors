@@ -11,7 +11,7 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 WORKDIR /app
-ADD . /app
+ADD /app /app
 
 ENV FLASK_APP=server
 EXPOSE 5000
