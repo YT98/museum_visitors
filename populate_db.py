@@ -7,7 +7,7 @@ import fetch_data as fetch_data
 def populate_db(db):
     ### Reset tables
     db.truncate_tables()
-    
+
     ### Load dataframes and create alias dict
     vis_df = fetch_data.get_visitor_df()
     london_df = fetch_data.get_population_df()
@@ -17,6 +17,7 @@ def populate_db(db):
         "Suzhou": "Suzhou, Jiangsu",
         "Taiwan": "China",
         "Vatican City": "Vatican"
+    }
     
     ### Populate cities table
     city_names_ls = vis_df.City.unique()
