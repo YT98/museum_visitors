@@ -65,6 +65,13 @@ class Db:
         cursor.execute("INSERT INTO avg_visitors VALUES (%s, %s)" % (city_id, avg_visitors))
         cursor.close()
 
+    def get_training_data(self):
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT population, avg_visitors FROM population INNER JOIN avg_visitors ON population.city_id = avg_visitors.city_id")
+        training_data = cursor.fetchall()
+        cursor.close()
+        return training_data
+
     def truncate_tables(self):
         cursor = self.conn.cursor()
         cursor.execute("SHOW TABLES")
