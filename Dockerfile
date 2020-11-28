@@ -13,6 +13,7 @@ RUN pip install -r requirements.txt
 WORKDIR /app
 ADD . /app
 
+ENV FLASK_APP=server
+EXPOSE 5000
 
-ENTRYPOINT [ "python", "main.py" ]
-CMD ["--help"]
+ENTRYPOINT [ "flask", "run", "--host=0.0.0.0"]
