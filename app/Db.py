@@ -22,6 +22,16 @@ class Db:
     def commit(self):
         self.conn.commit()
 
+    def truncate_tables(self):
+        cursor = self.conn.cursor()
+        cursor.execute("SHOW TABLES")
+        tables = []
+        for (table,) in cursor:
+            tables.append(table)
+        for table in tables:
+            cursor.execute("TRUNCATE TABLE %s" % (table))
+        cursor.close()
+
     def insert_city(self, id, name, country):
         cursor = self.conn.cursor()
         cursor.execute("INSERT INTO cities VALUES (%s, '%s', '%s')" % (id, name, country))
@@ -72,14 +82,21 @@ class Db:
         cursor.close()
         return training_data
 
-    def truncate_tables(self):
+    def get_home_page_data(self):
         cursor = self.conn.cursor()
-        cursor.execute("SHOW TABLES")
-        tables = []
-        for (table,) in cursor:
-            tables.append(table)
-        for table in tables:
-            cursor.execute("TRUNCATE TABLE %s" % (table))
+
+        pop_cols = ["City", "Country", "Population"]
+        cursor.execute("SELECT name, country, population FROM population INNER JOIN cities ON population.city_id = cities.id")
+        pop = cursor.fetchall()
+
+        vis_cols = ["Museum Name", "City", "Country", "Visitors (/year)"]
+        cursor.execute("SELECT museum_name, name, country, visitors FROM visitors INNER JOIN cities ON visitors.city_id = cities.id")
+        vis = cursor.fetchall()
+
+        avg_vis_cols = ["City", "Country", "Average Visitors (/year)"]
+        cursor.execute("SELECT name, country, avg_visitors FROM avg_visitors INNER JOIN cities ON avg_visitors.city_id = cities.id")
+        avg_vis = cursor.fetchall()
+
         cursor.close()
-    
+        return [(pop_cols, vis_cols, avg_vis_cols), (pop, vis, avg_vis)]
         
