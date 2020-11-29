@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+{% from "navbar.html" import navbar %}
+
+{% block navbar %}
+  {{ navbar() }}
+{% endblock %}
+
+{% block content %}
+  <button type="button" class="btn btn-primary mb-4 p-2" id="create-reg"> Create Regression Model </button>
+
+  <div class="container mt-2">
+    <div class="col-md-4">
+      <form>
+        <p> Predict </p>
+        <div class="form-row mt-3">
+          <div class="form-group">
+            <input type="text" class="form-control" id="input-pop-id" placeholder="Population">
+          </div>
+          <div class="form-group">
+            <button type="button" class="btn btn-primary" id="create-reg"> Predict </button>
+          </div>
+        </div>
+      </form>
+      
+    </div>
+
+    <div class="col-md-8">
+
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    $('#populate').click(function() {
+      $.ajax({
+          url: '/populate',
+          type: 'GET',
+          success: function (response) {
+            alert("Success! Reload page to see changes.");
+          },
+          error: function () {
+              alert("error");
+          }
+      });
+    });
+    
+    $('#pop-update').click(function() {
+      $.ajax({
+        url: '/update-population',
+        type: 'GET',
+        data: jQuery.param({ city_id: $('#input-pop-id').val(), population: $('#input-pop').val()}) ,
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        success: function (response) {
+            alert("Success! Reload page to see changes.");
+        },
+        error: function () {
+            alert("error");
+        }
+      });
+    });
+  </script>
+{% endblock %}

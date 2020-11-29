@@ -29,3 +29,7 @@ def update_population():
     population = request.args.get("population")
     controller.update_population(city_id, population)
     return ("nothing")
+
+@app.route("/linear-regression")
+def linear_regression():
+    return render_template('linear-regression.html')
