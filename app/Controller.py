@@ -1,15 +1,21 @@
 import mysql.connector 
 
-class Db:
+from .WikiData import WikiData
+from .LondonData import LondonData
+
+class Controller:
     def __init__(self):
+        self.init_conn()
         self.init_db() 
 
-    def init_db(self):
+    def init_conn(self):
         self.conn = mysql.connector.connect(
                 host="db",
                 user="root",
                 password="password"
             )
+
+    def init_db(self):
         cursor = self.conn.cursor()
         cursor.execute("CREATE DATABASE IF NOT EXISTS museum_visitors_db")
         cursor.execute("USE museum_visitors_db")
@@ -32,6 +38,34 @@ class Db:
             cursor.execute("TRUNCATE TABLE %s" % (table))
         cursor.close()
 
+    def populate(self):
+        self.truncate_tables()
+        wiki = WikiData()
+        london = LondonData()
+        wiki.load(self)
+        london.load(self)
+
+
+    def get_home_page_data(self):
+        cursor = self.conn.cursor()
+
+        pop_cols = ["City", "Country", "Population"]
+        cursor.execute("SELECT name, country, population FROM population INNER JOIN cities ON population.city_id = cities.id")
+        pop = cursor.fetchall()
+
+        vis_cols = ["Museum Name", "City", "Country", "Visitors (/year)"]
+        cursor.execute("SELECT museum_name, name, country, visitors FROM visitors INNER JOIN cities ON visitors.city_id = cities.id")
+        vis = cursor.fetchall()
+
+        avg_vis_cols = ["City", "Country", "Average Visitors (/year)"]
+        cursor.execute("SELECT name, country, avg_visitors FROM avg_visitors INNER JOIN cities ON avg_visitors.city_id = cities.id")
+        avg_vis = cursor.fetchall()
+
+        cursor.close()
+        return [(pop_cols, vis_cols, avg_vis_cols), (pop, vis, avg_vis)]
+
+
+    ### CITIES METHODS
     def insert_city(self, id, name, country):
         cursor = self.conn.cursor()
         cursor.execute("INSERT INTO cities VALUES (%s, '%s', '%s')" % (id, name, country))
@@ -48,14 +82,18 @@ class Db:
         cursor = self.conn.cursor()
         cursor.execute("SELECT id FROM cities WHERE name = '%s'" % (name))
         id = cursor.fetchone()[0]
-        cursor.close()
         return id
+        cursor.close()
 
+
+    ### POPULATION METHODS
     def insert_population(self, city_id, population):
         cursor = self.conn.cursor()
         cursor.execute("INSERT INTO population VALUES ('%s', '%s')" % (city_id, population))
         cursor.close()
 
+
+    ## VISITORS METHODS
     def insert_visitors(self, city_id, museum_name, visitors):
         cursor = self.conn.cursor()
         cursor.execute("INSERT INTO visitors VALUES (%s, '%s', %s)" % (city_id, museum_name, visitors))
@@ -81,22 +119,3 @@ class Db:
         training_data = cursor.fetchall()
         cursor.close()
         return training_data
-
-    def get_home_page_data(self):
-        cursor = self.conn.cursor()
-
-        pop_cols = ["City", "Country", "Population"]
-        cursor.execute("SELECT name, country, population FROM population INNER JOIN cities ON population.city_id = cities.id")
-        pop = cursor.fetchall()
-
-        vis_cols = ["Museum Name", "City", "Country", "Visitors (/year)"]
-        cursor.execute("SELECT museum_name, name, country, visitors FROM visitors INNER JOIN cities ON visitors.city_id = cities.id")
-        vis = cursor.fetchall()
-
-        avg_vis_cols = ["City", "Country", "Average Visitors (/year)"]
-        cursor.execute("SELECT name, country, avg_visitors FROM avg_visitors INNER JOIN cities ON avg_visitors.city_id = cities.id")
-        avg_vis = cursor.fetchall()
-
-        cursor.close()
-        return [(pop_cols, vis_cols, avg_vis_cols), (pop, vis, avg_vis)]
-        
