@@ -16,21 +16,34 @@
       <a class="nav-link active" id="population-tab" data-toggle="tab" href="#population" role="tab" aria-controls="population" aria-selected="true">Population</a>
     </li>
     <li class="nav-item" role="presentation">
-      <a class="nav-link" id="visitors-tab" data-toggle="tab" href="#visitors" role="tab" aria-controls="visitors" aria-selected="false">Museums and Visitors</a>
+      <a class="nav-link" id="avg-visitors-tab" data-toggle="tab" href="#avg-visitors" role="tab" aria-controls="avg-visitors" aria-selected="false">Average Visitors</a>
     </li>
     <li class="nav-item" role="presentation">
-      <a class="nav-link" id="avg-visitors-tab" data-toggle="tab" href="#avg-visitors" role="tab" aria-controls="avg-visitors" aria-selected="false">Average Visitors</a>
+      <a class="nav-link" id="visitors-tab" data-toggle="tab" href="#visitors" role="tab" aria-controls="visitors" aria-selected="false">Museums and Visitors</a>
     </li>
   </ul>
   <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" id="population" role="tabpanel" aria-labelledby="population-tab">
+      <form>
+        <div class="form-row mt-3">
+          <div class="form-group col-md-3">
+            <input type="text" class="form-control" id="input-pop-id" placeholder="City ID">
+          </div>
+          <div class="form-group col-md-8">
+            <input type="text" class="form-control" id="input-pop" placeholder="Population">
+          </div>
+          <div class="form-group col-md-1">
+            <button type="submit" class="btn btn-primary" id="pop-update">Update</button>
+          </div>
+        </div>
+      </form>
       {{ table(pop["cols"], pop["data"]) }}
-    </div>
-    <div class="tab-pane fade" id="visitors" role="tabpanel" aria-labelledby="visitors-tab">
-      {{ table(vis["cols"], vis["data"]) }}
     </div>
     <div class="tab-pane fade" id="avg-visitors" role="tabpanel" aria-labelledby="avg-visitors-tab">
       {{ table(avg_vis["cols"], avg_vis["data"]) }}
+    </div>
+    <div class="tab-pane fade" id="visitors" role="tabpanel" aria-labelledby="visitors-tab">
+      {{ table(vis["cols"], vis["data"]) }}
     </div>
   </div>
 {% endblock %}
@@ -40,8 +53,29 @@
     $('#populate').click(function() {
       $.ajax({
           url: '/populate',
-          type: 'GET'
+          type: 'GET',
+          success: function (response) {
+            alert("Success! Reload page to see changes.");
+          },
+          error: function () {
+              alert("error");
+          }
       });
-  });
+    });
+    
+    $('#pop-update').click(function() {
+      $.ajax({
+        url: '/update-population',
+        type: 'GET',
+        data: jQuery.param({ city_id: $('#input-pop-id').val(), population: $('#input-pop').val()}) ,
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        success: function (response) {
+            alert("Success! Reload page to see changes.");
+        },
+        error: function () {
+            alert("error");
+        }
+      });
+    });
   </script>
 {% endblock %}

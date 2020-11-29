@@ -1,4 +1,4 @@
-from flask import Flask, redirect
+from flask import Flask, redirect, request
 from flask import render_template
 
 # from .RegModel import RegModel
@@ -21,4 +21,11 @@ def data():
 @app.route("/populate")
 def populate():
     controller.populate()
+    return ("nothing")
+
+@app.route("/update-population")
+def update_population():
+    city_id = request.args.get("city_id")
+    population = request.args.get("population")
+    controller.update_population(city_id, population)
     return ("nothing")

@@ -1,4 +1,4 @@
-import mysql.connector 
+import mysql.connector
 
 from .WikiData import WikiData
 from .LondonData import LondonData
@@ -78,6 +78,13 @@ class Controller:
         }
         return data_obj
 
+    def get_training_data(self):
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT population, avg_visitors FROM population INNER JOIN avg_visitors ON population.city_id = avg_visitors.city_id")
+        training_data = cursor.fetchall()
+        cursor.close()
+        return training_data
+
 
     ### CITIES METHODS
     def insert_city(self, id, name, country):
@@ -106,6 +113,12 @@ class Controller:
         cursor.execute("INSERT INTO population VALUES ('%s', '%s')" % (city_id, population))
         cursor.close()
 
+    def update_population(self, city_id, population):
+        cursor = self.conn.cursor()
+        cursor.execute("UPDATE population SET population = %s WHERE city_id = %s" % (population, city_id))
+        cursor.close()
+        self.commit()
+
 
     ## VISITORS METHODS
     def insert_visitors(self, city_id, museum_name, visitors):
@@ -122,14 +135,9 @@ class Controller:
         cursor.close()
         return vis_ls
 
+
+    ## AVERAGE VISITORS METHODS
     def insert_avg_visitors(self, city_id, avg_visitors):
         cursor = self.conn.cursor()
         cursor.execute("INSERT INTO avg_visitors VALUES (%s, %s)" % (city_id, avg_visitors))
         cursor.close()
-
-    def get_training_data(self):
-        cursor = self.conn.cursor()
-        cursor.execute("SELECT population, avg_visitors FROM population INNER JOIN avg_visitors ON population.city_id = avg_visitors.city_id")
-        training_data = cursor.fetchall()
-        cursor.close()
-        return training_data
