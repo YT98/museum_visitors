@@ -45,8 +45,7 @@ class Controller:
         wiki.load(self)
         london.load(self)
 
-
-    def get_home_page_data(self):
+    def get_data_page_data(self):
         cursor = self.conn.cursor()
 
         pop_cols = ["City", "Country", "Population"]
@@ -62,7 +61,22 @@ class Controller:
         avg_vis = cursor.fetchall()
 
         cursor.close()
-        return [(pop_cols, vis_cols, avg_vis_cols), (pop, vis, avg_vis)]
+
+        data_obj = {
+            "pop": {
+                "cols": pop_cols,
+                "data": pop
+            },
+            "vis": {
+                "cols": vis_cols,
+                "data": vis
+            },
+            "avg_vis": {
+                "cols": avg_vis_cols,
+                "data": avg_vis
+            }
+        }
+        return data_obj
 
 
     ### CITIES METHODS

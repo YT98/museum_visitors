@@ -24,13 +24,13 @@
   </ul>
   <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" id="population" role="tabpanel" aria-labelledby="population-tab">
-      {{ table(pop_cols, pop) }}
+      {{ table(pop["cols"], pop["data"]) }}
     </div>
     <div class="tab-pane fade" id="visitors" role="tabpanel" aria-labelledby="visitors-tab">
-      {{ table(vis_cols, vis) }}
+      {{ table(vis["cols"], vis["data"]) }}
     </div>
     <div class="tab-pane fade" id="avg-visitors" role="tabpanel" aria-labelledby="avg-visitors-tab">
-      {{ table(avg_vis_cols, avg_vis) }}
+      {{ table(avg_vis["cols"], avg_vis["data"]) }}
     </div>
   </div>
 {% endblock %}

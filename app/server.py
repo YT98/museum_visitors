@@ -15,9 +15,8 @@ def home():
 
 @app.route("/data")
 def data():
-    pop_cols, vis_cols, avg_vis_cols = controller.get_home_page_data()[0]
-    pop, vis, avg_vis = controller.get_home_page_data()[1]
-    return render_template('data.html', pop_cols=pop_cols, pop=pop, vis_cols=vis_cols, vis=vis, avg_vis_cols=avg_vis_cols, avg_vis=avg_vis)
+    data_obj = controller.get_data_page_data()
+    return render_template('data.html', pop=data_obj["pop"], vis=data_obj["vis"], avg_vis=data_obj["avg_vis"])
 
 @app.route("/populate")
 def populate():
