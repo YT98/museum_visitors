@@ -48,20 +48,30 @@ class Controller:
     def get_data_page_data(self):
         cursor = self.conn.cursor()
 
+        # Get population table data
         pop_cols = ["City", "Country", "Population"]
         cursor.execute("SELECT name, country, population FROM population INNER JOIN cities ON population.city_id = cities.id")
-        pop = cursor.fetchall()
+        pop = []
+        for row in cursor:
+            pop.append([row[0], row[1], '{:,}'.format(row[2])])
 
+        # Get visitor table data
         vis_cols = ["Museum Name", "City", "Country", "Visitors (/year)"]
         cursor.execute("SELECT museum_name, name, country, visitors FROM visitors INNER JOIN cities ON visitors.city_id = cities.id")
-        vis = cursor.fetchall()
+        vis = []
+        for row in cursor:
+            vis.append([row[0], row[1], row[2], '{:,}'.format(row[3])])
 
+        # Get average visitors table data
         avg_vis_cols = ["City", "Country", "Average Visitors (/year)"]
         cursor.execute("SELECT name, country, avg_visitors FROM avg_visitors INNER JOIN cities ON avg_visitors.city_id = cities.id")
-        avg_vis = cursor.fetchall()
+        avg_vis = []
+        for row in cursor:
+            avg_vis.append([row[0], row[1], '{:,}'.format(row[2])])
 
         cursor.close()
 
+        # Store data in single object and return
         data_obj = {
             "pop": {
                 "cols": pop_cols,
