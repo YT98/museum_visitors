@@ -6,35 +6,52 @@
 {% endblock %}
 
 {% block content %}
-  <button type="button" class="btn btn-primary mb-4 p-2" id="create-reg"> Create Regression Model </button>
+  <div class="container">
+    <div class="row">
+        {% if has_model %}
+          <button type="button" class="btn btn-primary mb-4 p-2" id="create-model"> Create New Regression Model </button>
+        {% else %}
+          <button type="button" class="btn btn-primary mb-4 p-2" id="create-model"> Create Regression Model </button>
+        {% endif %}
+    </div>
+    {% if has_model %}
+    <div class="row">
+          <div class="col-md-4">
+            <form>
+              <div class="form-row mt-3">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="input-pop" placeholder="Population">
+                </div>
+                <div class="form-group">
+                  <button type="button" class="btn btn-primary ml-1" id="predict"> Predict </button>
+                </div>
+              </div>
+            </form>
+          </div>
+          {% if pred != None %}
+            <div class="col-md-4 d-flex align-items-center">
+              <p class="pl-2"> {{ pred }} visitors per year </p>
+            </div>
+          {% endif %}
+    </div>
+    {% endif %}
 
-  <div class="container mt-2">
-    <div class="col-md-4">
-      <form>
-        <p> Predict </p>
-        <div class="form-row mt-3">
-          <div class="form-group">
-            <input type="text" class="form-control" id="input-pop-id" placeholder="Population">
-          </div>
-          <div class="form-group">
-            <button type="button" class="btn btn-primary" id="create-reg"> Predict </button>
-          </div>
+    <div class="row">
+      {% if has_model %}
+        <div class="col-md-8">
+          <img src="plot.jpg" />
         </div>
-      </form>
-      
+      {% endif %}
     </div>
 
-    <div class="col-md-8">
-
-    </div>
   </div>
 {% endblock %}
 
 {% block scripts %}
   <script>
-    $('#populate').click(function() {
+    $('#create-model').click(function() {
       $.ajax({
-          url: '/populate',
+          url: '/linear-regression/create-model',
           type: 'GET',
           success: function (response) {
             alert("Success! Reload page to see changes.");
@@ -44,19 +61,18 @@
           }
       });
     });
-    
-    $('#pop-update').click(function() {
+
+    $('#predict').click(function() {
       $.ajax({
-        url: '/update-population',
-        type: 'GET',
-        data: jQuery.param({ city_id: $('#input-pop-id').val(), population: $('#input-pop').val()}) ,
-        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-        success: function (response) {
+          url: '/linear-regression/predict',
+          data: jQuery.param({ population: $('#input-pop').val()}),
+          type: 'GET',
+          success: function (response) {
             alert("Success! Reload page to see changes.");
-        },
-        error: function () {
-            alert("error");
-        }
+          },
+          error: function () {
+              alert("error");
+          }
       });
     });
   </script>
